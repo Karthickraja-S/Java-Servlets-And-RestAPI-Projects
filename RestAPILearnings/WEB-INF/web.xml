@@ -1,0 +1,112 @@
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+         id="WebApp_ID" version="3.0">
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+    </welcome-file-list>
+
+    <servlet>
+        <servlet-name>Hello API</servlet-name>
+        <servlet-class>com.example.servlets.HelloServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Hello API</servlet-name>
+        <url-pattern>/sayHello</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>Secure Hello API</servlet-name>
+        <servlet-class>com.example.servlets.SecureHelloServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Secure Hello API</servlet-name>
+        <url-pattern>/sapi/sayHello</url-pattern>
+    </servlet-mapping>
+
+    <filter>
+        <filter-name>Secure Filter</filter-name>
+        <filter-class>com.example.filters.SecureFilter</filter-class>
+        <init-param>
+            <!-- We can have excluded URLs or any thing that we need to check in SecureFilter class, then we can have those
+            constants here. -->
+            <param-name>Key</param-name>
+            <param-value>Value</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>Secure Filter</filter-name>
+        <url-pattern>/sapi/*</url-pattern>
+    </filter-mapping>
+
+    <!-- JERSEY API CONFIGURATION-->
+    <servlet>
+        <servlet-name>Jersey web app</servlet-name>
+        <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+        <!-- Register resources and providers under com.example.jerseyapi package. So, given
+        jersey.config.server.provider.packages as param-name
+        Type :
+        https://stackoverflow.com/questions/22994690/which-init-param-to-use-jersey-config-server-provider-packages-or-javax-ws-rs-a
+        -->
+        <init-param>
+            <param-name>jersey.config.server.provider.packages</param-name>
+            <param-value>com.example.jerseyapi</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Jersey web app</servlet-name>
+        <url-pattern>/jersey/*</url-pattern>
+    </servlet-mapping>
+    <!-- If the 2 servet container has same api mapped , then API fails by ModelValidationException-->
+    <servlet>
+        <servlet-name>Jersey web app2</servlet-name>
+        <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+        <init-param>
+            <param-name>javax.ws.rs.Application</param-name>
+            <param-value>com.example.jerseyapi.APIApplicationLoader</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Jersey web app2</servlet-name>
+        <url-pattern>/jerseyv2/*</url-pattern>
+    </servlet-mapping>
+
+    <!-- REDIRECTION OF ERROR PAGES IN REQUEST -->
+
+    <!-- we can even place a servlet path to the location attr below so that we can get the request attribute
+     ( check jsp page for attr example or refer net ) -->
+    <!-- If you want to have a generic Error Handler for all the exceptions
+    then you should define following error-page instead of defining separate error-page elements for every exception -->
+
+    <error-page>
+        <error-code>404</error-code>
+        <location>/errorPages/notfound.html</location>
+    </error-page>
+
+    <error-page>
+        <error-code>400</error-code>
+        <location>/errorPages/badreq.html</location>
+    </error-page>
+
+    <error-page>
+        <error-code>500</error-code>
+        <location>/errorPages/badreq.html</location>
+    </error-page>
+
+    <error-page>
+        <exception-type>java.lang.ArithmeticException</exception-type>
+        <location>/exceptionPages/err.jsp</location>
+    </error-page>
+
+    <error-page>
+        <exception-type>java.lang.Throwable</exception-type>
+        <location>/exceptionPages/err.jsp</location>
+    </error-page>
+
+</web-app>

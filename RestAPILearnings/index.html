@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hello</title>
+</head>
+<body>
+    <h1>Hi. Welcome to Rest API Learnings : <a href="https://eclipse-ee4j.github.io/jersey.github.io/documentation/2.25.1/index.html" >Learn More</a> </h1>
+
+    <h2>Form with sample servlet</h2>
+    <form action="sayHello" method="get">
+        <h2><label for="name">Enter your Name:</label><br></h2>
+        <input type="text" id="name" name="name" value=""><br>
+        <br>
+        <button>Click Me</button>
+    </form>
+
+    <h2>Form with servlet with secure filter configured.</h2>
+
+    <form action="sapi/sayHello" method="get">
+        <h2><label for="name">Enter your Name:</label><br></h2>
+        <input type="text" id="sname" name="sname" value=""><br>
+        <br>
+        <button>Click Me</button>
+    </form>
+
+
+    <div>
+        <h5> Issues that i have faced during my setup</h5>
+        <p>1. I have used Java 11 and Jersey 2.25.1 version ,
+            so i have faced  <a href="https://stackoverflow.com/questions/52658991/migrate-jersey-project-to-use-java-10-results-in-java-lang-illegalargumentexcept">IllegalArgumentException</a></p>
+        <p>2. I have used space in my project name. also the version is 2.25.1
+        so i have faced <a href="https://stackoverflow.com/questions/29015175/jersey-the-servlet-context-path-and-or-the-servlet-path-contain-characters-tha">Following Error</a></p>
+        <p>3. returning Student Object directly with mediatype of appln/json gets 500 exception for me.
+            <a href="https://stackoverflow.com/questions/26207252/messagebodywriter-not-found-for-media-type-application-json">Dependency Error</a>
+            So, included Jackson 2.4.8 & all transitive dependency.
+        </p>
+    </div>
+
+    <div>
+        <h6>Reference</h6>
+        <ul>
+            <li>https://docs.oracle.com/javaee/6/tutorial/doc/bnafd.html</li>
+            <li>https://www.tutorialspoint.com/servlets/servlets_overview.htm</li>
+        </ul>
+    </div>
+</body>
+</html>
