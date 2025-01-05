@@ -6,6 +6,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
@@ -28,13 +31,7 @@ public class HelloServlet extends HttpServlet {
         // not checking from backend ( like cache )
         // also cookie will be saved in browser as well as to server itself.
         // real usecase : rememberME option , search history
-        Map<String, String> cookieMap = null;
-        Cookie[] cookie = request.getCookies();
-        if(cookie != null) {
-             cookieMap = Arrays
-                    .stream(cookie)
-                    .collect(Collectors.toMap(Cookie::getName, Cookie::getValue));
-        }
+        Cookie[] cookies = request.getCookies();
 
         response.setContentType("text/html");
         PrintWriter writer = response.getWriter();
@@ -45,13 +42,20 @@ public class HelloServlet extends HttpServlet {
         writer.println("<br> context Path : "+contextPath);
         writer.println("<br> Query Str : "+queryStr);
 
-        if(cookieMap != null) {
-            writer.println("Cookie Map : " + cookieMap.getOrDefault("PrevSearches", "Empty"));
-            Cookie cookieD = new Cookie("PrevSearches" , cookieMap.keySet().toString());
-            response.addCookie(cookieD);
-        }
         if(name != null && !name.isEmpty()) {
             writer.println("<h1> Hi "+name + " ..! </h1>");
+            if(cookies != null) {
+                String data = "";
+                for(Cookie cookie : cookies) {
+                    if(cookie.getName().equalsIgnoreCase("PreviousHistory")) {
+                        data = URLDecoder.decode(cookie.getValue() , "UTF-8");
+                        writer.println("Previous History : "+ data);
+                    }
+                }
+                data = URLEncoder.encode( data + name + " , ", "UTF-8" ); // to avoid RFC 6265 compliant implementation
+                Cookie ck = new Cookie("PreviousHistory" ,data);
+                response.addCookie(ck);
+            }
         }
         writer.close();
     }
