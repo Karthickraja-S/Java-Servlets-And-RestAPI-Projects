@@ -22,6 +22,10 @@ public class AnnotationFilter implements ContainerRequestFilter {
     static ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
     @Override
     public void filter(ContainerRequestContext containerRequestContext) throws IOException {
+        
+        // similarly we can add ContainerResponseContext too so that all the response comes here and , we can do 
+        // logging OR data masking OR tracking stuff.
+        
         Method resourceMethod = resourceInfo.getResourceMethod();
 
         // This is just an example how an annotation play a role in filters. We can put those annotations
