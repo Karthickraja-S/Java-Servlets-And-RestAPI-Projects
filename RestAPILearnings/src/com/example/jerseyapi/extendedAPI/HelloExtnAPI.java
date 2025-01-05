@@ -1,6 +1,6 @@
 package com.example.jerseyapi.extendedAPI;
 
-import com.example.model.PremiumOnly;
+import com.example.model.LockAPI;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -20,7 +20,7 @@ public class HelloExtnAPI {
     @GET
     @Path("/getV2/premium")
     @Produces(MediaType.TEXT_HTML)
-    @PremiumOnly
+    @LockAPI
     public String premiumAPIEx() {
         return "This is a premium API which can be used only one time. Come back after 60 seconds to access the API.";
     }
@@ -28,7 +28,7 @@ public class HelloExtnAPI {
     @GET
     @Path("/getV2/premium2")
     @Produces(MediaType.TEXT_HTML)
-    @PremiumOnly(lockSeconds = 30)
+    @LockAPI(lockSeconds = 30)
     public String premiumAPIEx2() {
         return "This is a premium 2 API which can be used only one time. Come back after 30 seconds to access the API.";
     }
