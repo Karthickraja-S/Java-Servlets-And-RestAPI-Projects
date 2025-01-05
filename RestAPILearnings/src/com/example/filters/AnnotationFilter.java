@@ -1,6 +1,7 @@
 package com.example.filters;
 
 import com.example.model.LockAPI;
+import com.example.model.LockModel;
 
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
@@ -12,12 +13,14 @@ import java.lang.reflect.Method;
 import java.util.Hashtable;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
 public class AnnotationFilter implements ContainerRequestFilter {
+
+    Logger logger = Logger.getLogger(AnnotationFilter.class.getName());
     @Context
     private ResourceInfo resourceInfo;
-
-    Hashtable<String,Boolean> lockingFor1Min = new Hashtable<>();
+    Hashtable<String, LockModel> lockMap = new Hashtable<>();
     static ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
     @Override
     public void filter(ContainerRequestContext containerRequestContext) throws IOException {
@@ -25,7 +28,7 @@ public class AnnotationFilter implements ContainerRequestFilter {
         // similarly we can add ContainerResponseContext too so that all the response comes here and , we can do
         // logging OR data masking OR tracking stuff.
 
-        Method resourceMethod = resourceInfo.getResourceMethod();
+        Method resourceMethod = resourceInfo.getResourceMethod(); // we can access the class too.
 
         // This is just an example how an annotation play a role in filters. We can put those annotations
         // in a special API such that the API has been restricted to a functionality / acts as a dependency check
@@ -33,29 +36,43 @@ public class AnnotationFilter implements ContainerRequestFilter {
 
         String methodName = resourceMethod.getName();
 
-        LockAPI premiumOnly = resourceMethod.getAnnotation(LockAPI.class);
+        LockAPI lockAPI = resourceMethod.getAnnotation(LockAPI.class);
         System.out.println("Method to be called -> "+methodName);
 
-        if(premiumOnly == null) {
-            System.out.println("API is not for premium customers ...");
+        if(lockAPI == null) {
+            System.out.println("API is not restricted ...");
         } else {
-            // need to check with our custom logic.
-            // Only 1 time the premiumOnly API can be accessed.
-            if(lockingFor1Min.getOrDefault(methodName,false)) {
+            int secondsNeedToDelay = lockAPI.lockSeconds();
+            int apiAllowedToExecute      = lockAPI.apiAllowedToExecute();
+
+            // need to check whether the api can be allowed.
+            if(lockMap.containsKey(methodName) &&
+                    ( lockMap.get(methodName).isLocked() ) ) {
                 containerRequestContext.abortWith(Response.status(Response.Status.SERVICE_UNAVAILABLE).build());
             } else {
-                lockingFor1Min.put(methodName, true);
-                releaseLockAfter1Min(methodName);
+                // check whether the method already has Lock Obj , If so decrement the allowedCount and if reaches 0 then lockIt
+                if(lockMap.containsKey(methodName)) {
+                    LockModel model = lockMap.get(methodName);
+                    System.out.println(model);
+                    if(model.getMethodAllowedToExecute() == 1) {
+                        model.setLocked(true);
+                        resetLock(methodName , secondsNeedToDelay);
+                    } else {
+                        model.setMethodAllowedToExecute(model.getMethodAllowedToExecute() - 1);
+                    }
+                } else {
+                    lockMap.put(methodName, new LockModel(false, apiAllowedToExecute - 1));
+                }
             }
         }
     }
-    private void releaseLockAfter1Min(String methodName) {
+    private void resetLock(String methodName , int seconds) {
         executor.schedule(() -> {
-            System.out.println("Going to unlock method :: "+methodName);
-            lockingFor1Min.put(methodName, false);
-            System.out.println("Method Unlocked .");
-        },1 , TimeUnit.MINUTES);
-        System.out.println("Scheduled to unlock the method after 1 minute  :: "+methodName);
+            logger.info("Going to unlock method :: "+methodName);
+            lockMap.remove(methodName);
+            logger.info("Method Unlocked .");
+        },seconds , TimeUnit.SECONDS);
+        logger.info("Scheduled to unlock the method "+ methodName+" after seconds :: "+seconds);
     }
 
     static {
