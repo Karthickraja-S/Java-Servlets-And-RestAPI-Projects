@@ -1,12 +1,11 @@
 package com.example.filters;
 
-import com.example.model.PremiumOnly;
+import com.example.model.LockAPI;
 
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -22,10 +21,10 @@ public class AnnotationFilter implements ContainerRequestFilter {
     static ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
     @Override
     public void filter(ContainerRequestContext containerRequestContext) throws IOException {
-        
-        // similarly we can add ContainerResponseContext too so that all the response comes here and , we can do 
+
+        // similarly we can add ContainerResponseContext too so that all the response comes here and , we can do
         // logging OR data masking OR tracking stuff.
-        
+
         Method resourceMethod = resourceInfo.getResourceMethod();
 
         // This is just an example how an annotation play a role in filters. We can put those annotations
@@ -34,7 +33,7 @@ public class AnnotationFilter implements ContainerRequestFilter {
 
         String methodName = resourceMethod.getName();
 
-        PremiumOnly premiumOnly = resourceMethod.getAnnotation(PremiumOnly.class);
+        LockAPI premiumOnly = resourceMethod.getAnnotation(LockAPI.class);
         System.out.println("Method to be called -> "+methodName);
 
         if(premiumOnly == null) {
