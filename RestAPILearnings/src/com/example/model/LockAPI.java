@@ -15,7 +15,7 @@ import java.lang.annotation.Target;
  * Ex : if this is added to API /api/v2 , then this can be accessed only 1 time in a specified seconds
  * Then they have to wait for specified seconds after they access.
  */
-public @interface PremiumOnly {
+public @interface LockAPI {
     // we can even add methods here such that they can declare the value when they annotate this to a method!
     int lockSeconds() default 60;
 }
