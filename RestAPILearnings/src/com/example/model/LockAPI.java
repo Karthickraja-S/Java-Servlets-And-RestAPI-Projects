@@ -18,4 +18,5 @@ import java.lang.annotation.Target;
 public @interface LockAPI {
     // we can even add methods here such that they can declare the value when they annotate this to a method!
     int lockSeconds() default 60;
+    int apiAllowedToExecute() default 5;
 }
