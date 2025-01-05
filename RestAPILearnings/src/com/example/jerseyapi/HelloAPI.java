@@ -8,7 +8,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-
+// https://docs.oracle.com/cd/E19226-01/820-7627/giepu/index.html
 @Path("api")
 public class HelloAPI {
     @GET
