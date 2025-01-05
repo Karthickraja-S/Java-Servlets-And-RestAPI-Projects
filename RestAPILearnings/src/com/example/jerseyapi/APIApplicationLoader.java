@@ -9,6 +9,8 @@ public class APIApplicationLoader extends Application {
         Set<Class<?>> classSet = new HashSet<>();
         // add Rest API classes below
         classSet.add(com.example.jerseyapi.extendedAPI.HelloExtnAPI.class);
+        // all the class registered ( apis ) will also be sent to this filters
+        classSet.add(com.example.filters.AnnotationFilter.class);
 
         return classSet;
     }
