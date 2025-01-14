@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.example</groupId>
+    <artifactId>MavenTest</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <properties>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <!-- Also, if the below jar is dependent on other jar files ( transitive dependency ) ,
+    then MAVEN will pull those files too. That's the beauty of MAVEN type project. -->
+    <!-- Also, it is easy to give this project to ur frnd so that they just import the project,
+     simply run the project easily! -->
+    <dependencies>
+        <!-- https://mvnrepository.com/artifact/org.json/json -->
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20241224</version>
+        </dependency>
+
+
+        <!--
+        All dependency has GroupID , ArtifactID , version in it to identify
+        each unique jar files with versions..
+        We can also use a pre-defined template which has been created by different devs
+        so we can directly code in it.
+        Ex : File -> New Project -> Maven ArcheType -> Catalog ( choose maven central )
+        Now u will have multiple templates ( ex: u will have spring mvc with all dependency
+        already defined in pom.xml so that u don't worry about adding those xmls )
+        -->
+
+    </dependencies>
+
+</project>
