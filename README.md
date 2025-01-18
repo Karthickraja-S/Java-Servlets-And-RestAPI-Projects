@@ -3,7 +3,7 @@
 3. Rest API Learnings which includes basics of jersey API creations and issues that i have faces during my learnings.
 
 
-Deploying Application to tomcat ? 
+Deploying Application to tomcat ?  ( Used tomcat version - 9.0.71 and Java 8 )
 
 1. Generate jar files with all your class files as a package ( jar cvf <FILE_NAME>.jar * ) *-refers as ALL content to be included.
 2. Place the jar files inside <ROOT_PKG_NAME>/webapp/lib
