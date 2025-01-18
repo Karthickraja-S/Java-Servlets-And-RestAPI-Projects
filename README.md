@@ -10,3 +10,5 @@ Deploying Application to tomcat ?  ( Used tomcat version - 9.0.71 and Java 8 )
 3. Generate a war file of your <ROOT_PKG_NAME> ( jar cvf <FILE_NAME>.war * )
 4. Place the war file inside tomcatHome/webapps
 5. Start the tomcat by calling startup.bat inside bin folder. 
+
+If your app has any jar dependency then include those jars inside tomcat lib directory OR place inside rootPKG/webapp/lib
