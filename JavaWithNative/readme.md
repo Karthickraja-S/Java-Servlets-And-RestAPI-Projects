@@ -15,7 +15,8 @@ or mathematical calculations. Useful when optimizing for low-level hardware oper
 5. Java’s automatic garbage collector does not manage memory allocated by native code.
 6. Developers must manually handle memory in C/C++ to prevent memory leaks.
 
-
+# References
+1. https://www3.ntu.edu.sg/home/ehchua/programming/java/javanativeinterface.html
 
 # How to create and integrate DLL
 
